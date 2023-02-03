@@ -13,12 +13,14 @@ export default async function handler(
 
   const response = await openai.createCompletion({
     model: "text-davinci-003",
+    top_p: 1.0,
+    frequency_penalty: 0.5,
+    presence_penalty: 0.0,
+    temperature: 0,
     prompt: `
-     Given is job description. Want to know how ethical, inclusive and transparent company is. Provide the following information and be very strict:
-      - Discriminatory? Rate on a scale of 1-5 and list reasons.
-      - Compensation transparent? Rate on a scale of 1-5 and list reasons.
-      
-      Return the result as HTML with h2 and p.
+     Given is a job description. Provide very strict feedback on how inclusive and fair the job description is. Give general feedback on the job description, and then provide feedback on the following aspects of the job description:
+     - Inclusivity
+     - Transparency
       
       Job description:
         ${value}
