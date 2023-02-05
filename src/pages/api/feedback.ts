@@ -42,12 +42,12 @@ Present it in a professional way.
 Please give an overall score that is the average of all ratings.
 Nothing is perfect, do not give any 100%.
 
-Format the result with h2 and p HTML tags, do not use any other HTML tags.
+Format the result as HTML. Use h2 for the category name and p for the remarks and recommendations.
       
       Job description:
         ${value}
       `,
-    max_tokens: 5000,
+    max_tokens: 2000,
   });
 
   res.status(200).json({ feedback: response.data.choices[0].text ?? "" });
