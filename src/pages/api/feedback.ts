@@ -17,8 +17,8 @@ export default async function handler(
     frequency_penalty: 0.5,
     presence_penalty: 0.0,
     temperature: 0,
-    prompt: `
-I want you to assess the job title, the responsibilities, Accuracy of human skills, Inclusiveness (degree), the accuracy of technical skills, Inclusiveness (language), transparency, and attractiveness of a job description. Could you help me to rate the following 8 points?
+    prompt: `I want you to assess the job title, the responsibilities, Accuracy of human skills, Inclusiveness (degree), the accuracy of technical skills, Inclusiveness (language), transparency, and attractiveness of a job description of a job description.
+Make use of the following criteria:
 
 1. Job title: Compare the job title with a list of 3 job titles that you would give for the tasks and responsibilities mentioned. (100% means it is the best job title possible, 0% the worst).
 2. Responsibilities: Compare the list of responsibilities for the given job title with the list of responsibilities for 50 job descriptions. (100% means the list of responsibilities is accurate and covers the scope of the job) 
@@ -30,23 +30,15 @@ Your job is to calculate the average of "Relevance" please.
 7. Transparency: rate the transparency according to the following aspects: Salary package, Technical skills, Team size, Career evolution, Tasks and responsibilities, and Company’s mission. If everything is clear, it must be close to 100%.
 8. Attractiveness: rate on a scale of 0-100 the attractiveness of the job description focusing on 3 aspects, Employee Benefits, Company Culture, and Social impact.
 
-Can I give you one job description to rate with the above criteria?
-Finish with 2 or 3 recommendations with bullet points for each of the following categories: the job title, Accuracy of human skills, Inclusiveness (degree), accuracy of technical skills, Inclusiveness (language), transparency, and attractiveness of the job description.
-For each category, give
-
-1. the rating,
-2. the remarks,
-3. the recommendations.
-Then continue with the next category.
-Present it in a professional way.
-Please give an overall score that is the average of all ratings.
+For each category, provide the rating in percent and a list of remarks and recommendations in a clear and concise manner.
 Nothing is perfect, do not give any 100%.
 
-Format the result as HTML. Use h2 for the category name and p for the remarks and recommendations.
+Job description:
+${value}
+
+Return the result as HTML. Use h2 for the category and p for everything else.
       
-      Job description:
-        ${value}
-      `,
+`,
     max_tokens: 2000,
   });
 
