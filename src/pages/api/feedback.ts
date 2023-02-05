@@ -18,7 +18,7 @@ export default async function handler(
     presence_penalty: 0.0,
     temperature: 0,
     prompt: `
-    I want you to assess the job title, the responsibilities, Accuracy of human skills, Inclusiveness (degree), the accuracy of technical skills, Inclusiveness (language), transparency, and attractiveness of a job description. Could you help me to rate the following 8 points?
+I want you to assess the job title, the responsibilities, Accuracy of human skills, Inclusiveness (degree), the accuracy of technical skills, Inclusiveness (language), transparency, and attractiveness of a job description. Could you help me to rate the following 8 points?
 
 1. Job title: Compare the job title with a list of 3 job titles that you would give for the tasks and responsibilities mentioned. (100% means it is the best job title possible, 0% the worst).
 2. Responsibilities: Compare the list of responsibilities for the given job title with the list of responsibilities for 50 job descriptions. (100% means the list of responsibilities is accurate and covers the scope of the job) 
@@ -41,13 +41,13 @@ Then continue with the next category.
 Present it in a professional way.
 Please give an overall score that is the average of all ratings.
 Nothing is perfect, do not give any 100%.
-      
-      Format the result as HTML using h2 for the category and p for the remarks and recommendations. Do not use any other HTML tags.
+
+Format the result with h2 and p HTML tags, do not use any other HTML tags.
       
       Job description:
         ${value}
       `,
-    max_tokens: 2000,
+    max_tokens: 5000,
   });
 
   res.status(200).json({ feedback: response.data.choices[0].text ?? "" });
