@@ -1,9 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { openai } from "../../util/openai";
 
-type Data = {
-  feedback: string;
-};
+type Data =
+  | {
+      feedback: string;
+    }
+  | { error: string };
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,9 +13,10 @@ export default async function handler(
 ) {
   const { value } = req.body;
 
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: `I want you to assess the job title, the list of responsibilities, the accuracy of human skills, inclusiveness (degree), the accuracy of technical skills, inclusiveness (language), transparency, and attractiveness of a job description. Could you help me to rate (out of 100) the following 8 points?
+  try {
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: `I want you to assess the job title, the list of responsibilities, the accuracy of human skills, inclusiveness (degree), the accuracy of technical skills, inclusiveness (language), transparency, and attractiveness of a job description. Could you help me to rate (out of 100) the following 8 points?
 
 1. Job title: Compare the job title with a list of 3 job titles that you would give for the tasks and responsibilities mentioned. (100% means it is the best job title possible, 0% the worst).
 2. Responsibilities: The ideal amount of responsibilities is between 6 and 9 and they are all relevant to the job title. If there are fewer than 6 or more than 9 tasks and responsibilities, give a score under 70% and say that it needs more or fewer tasks and responsibilities. If any of the most demanded responsibilities are not found in job descriptions, mention and detail them. 
@@ -47,8 +50,14 @@ ${value}
 Return the result as HTML. Use h2 for the category and p for everything else.
       
 `,
-    max_tokens: 2000,
-  });
+      max_tokens: 2000,
+    });
 
-  res.status(200).json({ feedback: response.data.choices[0].text ?? "" });
+    return res
+      .status(200)
+      .json({ feedback: response.data.choices[0].text ?? "" });
+  } catch (e) {
+    // @ts-ignore
+    return res.status(500).json({ error: e.response.data.error.message });
+  }
 }

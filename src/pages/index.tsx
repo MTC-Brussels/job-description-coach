@@ -1,6 +1,7 @@
 import { Inter } from "@next/font/google";
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Modal from "../components/modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +17,21 @@ const variants = {
 export default function Index() {
   const [value, setValue] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   return (
     <>
+      <Modal
+        title={"Oops!"}
+        description={"Something went wrong"}
+        isOpen={error !== ""}
+        onToggle={() => setError("")}
+      >
+        <div className={"text-sm text-neutral-500"}>
+          <p>{error}</p>
+        </div>
+      </Modal>
       <main
         className={
           "min-w-screen flex min-h-screen flex-col items-center justify-center bg-white px-6 py-16"
@@ -186,15 +198,23 @@ export default function Index() {
                   onClick={async () => {
                     setLoading(true);
                     setFeedback("");
-                    const feedback = await fetch("/api/feedback", {
+                    setError("");
+
+                    const response = await fetch("/api/feedback", {
                       method: "POST",
                       body: JSON.stringify({ value }),
                       headers: {
                         "Content-Type": "application/json",
                       },
-                    }).then((res) => res.json());
-                    setFeedback(feedback.feedback);
-                    console.log(feedback);
+                    }).then((r) => r.json());
+
+                    console.log(response);
+                    if (response.error) {
+                      setError(response.error);
+                    } else {
+                      setFeedback(response.feedback);
+                    }
+
                     setLoading(false);
                   }}
                 >
